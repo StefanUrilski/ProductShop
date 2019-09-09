@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-import static com.softuni.productshop.common.Constants.*;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -19,27 +17,27 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+//                .cors().disable()
+//                .csrf().disable()
                 .csrf()
                 .csrfTokenRepository(csrfTokenRepository())
                 .and()
                 .authorizeRequests()
                 .mvcMatchers("/css/**", "/js/**").permitAll()
                 .mvcMatchers("/", "/users/login", "/users/register").anonymous()
-                .mvcMatchers("/home", "/logout", "/users/profile", "/viruses/show").authenticated()
-                .mvcMatchers("/viruses/add", "/viruses/edit", "/viruses/delete")
-                .hasAnyAuthority(ROLE_MODERATOR, ROLE_ADMIN, ROLE_ROOT)
-                .mvcMatchers("/users/all").hasAnyAuthority(ROLE_ADMIN, ROLE_ROOT)
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/users/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/users/profile")
+                .defaultSuccessUrl("/users/login/profile")
                 .and()
                 .logout()
+                .logoutSuccessUrl("/")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/unauthorized")
+                .accessDeniedPage("/");
         ;
     }
 
