@@ -47,8 +47,11 @@ public class UserController extends BaseController {
 
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public ModelAndView register() {
-        return view("user/register");
+    public ModelAndView register(ModelAndView modelAndView,
+                                 @ModelAttribute(name = "model") UserRegisterBindingModel model) {
+        modelAndView.addObject("model", model);
+
+        return view("user/register", modelAndView);
     }
 
     @PostMapping("/register")
